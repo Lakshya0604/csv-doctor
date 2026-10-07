@@ -32,6 +32,12 @@ npm run build
 
 Build output: `apps/web/dist`. Core: `packages/core/index.js`. Tests: `packages/core/core.test.js`.
 
-## Publication status
+## Contribute
 
-Private preview. License, public release, contribution guide and community issues are pending owner review. No license has been selected yet.
+New contributors are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md), then pick a focused issue labeled `good first issue`. Each starter issue explains the expected behavior, relevant files and checks.
+
+Please don't submit real customer data, credentials or bulk cosmetic PRs. Useful bug reports, tests, accessibility fixes and clearer docs all count. See the guide for the source map, test commands and data-safety rules.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
