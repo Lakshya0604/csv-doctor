@@ -1,4 +1,4 @@
-import {useMemo,useRef,useState} from 'react';
+import React, {useMemo,useRef,useState} from 'react';
 import {parseCSV,transform,stats,exportCSV,SAMPLE,MAX_BYTES} from '../../../packages/core/index.js';
 function download(text,name,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 export default function App(){
