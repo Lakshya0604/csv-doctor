@@ -1,0 +1,7 @@
+ Order ID ,Customer,Date,Amount,Status
+SO-1001,Asha,01/02/2026,"1,249.50",Paid
+SO-1002,Ravi,03/02/2026,"2,100.00",Pending
+SO-1002,Ravi,03/02/2026,"2,100.00",Pending
+,,,,
+SO-1003,Meera,08/02/2026,850.00,Paid
+SO-1004,=DEMO(),10/02/2026,399.00,Pending
