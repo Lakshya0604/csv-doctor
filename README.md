@@ -2,6 +2,8 @@
 
 Preview and clean CSVs locally in your browser. React/Vite UI with a pure JavaScript transformation core. No accounts, database, uploads, analytics or API keys.
 
+Demo: https://csv-doctor-ihm2.onrender.com/
+
 ## Current features
 
 - UTF-8 import or paste, with explicit comma, semicolon, tab or pipe separator.
@@ -22,6 +24,8 @@ Node 22 (`.nvmrc`).
 npm ci
 npm run dev
 npm test
+npx playwright install chromium
+npm run test:ui
 npm run lint
 npm run build
 ```
