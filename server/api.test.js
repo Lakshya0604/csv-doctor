@@ -1,0 +1,31 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+const BASE = process.env.API_BASE || 'http://localhost:3000';
+const call = async (path, {method = 'GET', body, token} = {}) => {
+  const r = await fetch(BASE + path, {method, headers: {...(body ? {'content-type': 'application/json'} : {}), ...(token ? {authorization: `Bearer ${token}`} : {})}, body: body ? JSON.stringify(body) : undefined});
+  return {status: r.status, data: await r.json()};
+};
+test('signup, login, runs CRUD, isolation, account delete', async () => {
+  const stamp = Date.now(), a = {email: `qa.csv.${stamp}@example.com`, password: 'correct-horse-1'}, b = {email: `qa.csv2.${stamp}@example.com`, password: 'correct-horse-2'};
+  assert.equal((await call('/api/health')).data.db, true);
+  assert.equal((await call('/api/auth/signup', {method: 'POST', body: {email: 'bad', password: 'x'}})).status, 400);
+  const sa = await call('/api/auth/signup', {method: 'POST', body: a}); assert.equal(sa.status, 201);
+  assert.equal((await call('/api/auth/signup', {method: 'POST', body: a})).status, 409);
+  assert.equal((await call('/api/auth/login', {method: 'POST', body: {...a, password: 'wrong-password'}})).status, 401);
+  const la = await call('/api/auth/login', {method: 'POST', body: a}); assert.equal(la.status, 200);
+  const ta = la.data.token, tb = (await call('/api/auth/signup', {method: 'POST', body: b})).data.token;
+  assert.equal((await call('/api/runs')).status, 401);
+  const run = {name: 'orders', delimiter: ',', options: {removeBlank: true}, inputRows: 5, outputRows: 4, changeCount: 1, log: [{action: 'remove blank row', row: 4, column: null, before: null, after: null}], csv: 'a,b\n1,2\n'};
+  const created = await call('/api/runs', {method: 'POST', body: run, token: ta}); assert.equal(created.status, 201);
+  assert.equal((await call('/api/runs', {method: 'POST', body: {...run, csv: ''}, token: ta})).status, 400);
+  const list = await call('/api/runs', {token: ta}); assert.equal(list.data.runs.length, 1); assert.equal(list.data.runs[0].csv, undefined);
+  const one = await call(`/api/runs/${created.data.id}`, {token: ta}); assert.equal(one.data.run.csv, run.csv); assert.equal(one.data.run.log.length, 1);
+  assert.equal((await call(`/api/runs/${created.data.id}`, {token: tb})).status, 404);
+  assert.equal((await call(`/api/runs/${created.data.id}`, {method: 'DELETE', token: tb})).status, 404);
+  assert.equal((await call(`/api/runs/${created.data.id}`, {method: 'DELETE', token: ta})).status, 200);
+  assert.equal((await call('/api/runs', {token: ta})).data.runs.length, 0);
+  await call('/api/runs', {method: 'POST', body: run, token: ta});
+  assert.equal((await call('/api/account', {method: 'DELETE', token: ta})).status, 200);
+  assert.equal((await call('/api/auth/login', {method: 'POST', body: a})).status, 401);
+  assert.equal((await call('/api/account', {method: 'DELETE', token: tb})).status, 200);
+});
