@@ -4,11 +4,12 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import rateLimit from 'express-rate-limit';
+import crypto from 'node:crypto';
 
-const {MONGODB_URI, JWT_SECRET, CORS_ORIGIN = 'https://csv-doctor-ihm2.onrender.com', PORT = 3000} = process.env;
+const {MONGODB_URI, JWT_SECRET, CORS_ORIGIN = 'https://csv-doctor-ihm2.onrender.com', PORT = 3000, BREVO_API_KEY, MAIL_FROM, MAIL_FROM_NAME = 'CSV Doctor', APP_URL = 'https://csv-doctor-ihm2.onrender.com'} = process.env;
 if (!MONGODB_URI || !JWT_SECRET || JWT_SECRET.length < 32) { console.error('MONGODB_URI and a 32+ char JWT_SECRET are required'); process.exit(1); }
 const MAX_CSV = 2 * 1024 * 1024;
-const User = mongoose.model('User', new mongoose.Schema({email: {type: String, unique: true, required: true}, passwordHash: {type: String, required: true}}, {timestamps: true}));
+const User = mongoose.model('User', new mongoose.Schema({email: {type: String, unique: true, required: true}, passwordHash: {type: String, required: true}, resetHash: String, resetExp: Date}, {timestamps: true}));
 const Run = mongoose.model('Run', new mongoose.Schema({
   userId: {type: mongoose.Schema.Types.ObjectId, index: true, required: true},
   name: {type: String, maxlength: 120, required: true}, delimiter: {type: String, enum: [',', ';', '\t', '|'], required: true},
@@ -44,6 +45,31 @@ app.post('/api/auth/login', authLimiter, wrap(async (req, res) => {
   const ok = u && typeof req.body.password === 'string' && await bcrypt.compare(req.body.password, u.passwordHash);
   if (!ok) return res.status(401).json({error: 'Wrong email or password'});
   res.json({token: sign(u), email});
+}));
+const sha = t => crypto.createHash('sha256').update(t).digest('hex');
+async function sendMail(to, subject, html) {
+  if (!BREVO_API_KEY || !MAIL_FROM) throw new Error('mail not configured');
+  const r = await fetch('https://api.brevo.com/v3/smtp/email', {method: 'POST', headers: {'api-key': BREVO_API_KEY, 'content-type': 'application/json', accept: 'application/json'}, body: JSON.stringify({sender: {name: MAIL_FROM_NAME, email: MAIL_FROM}, to: [{email: to}], subject, htmlContent: html})});
+  if (!r.ok) throw new Error(`mail failed ${r.status}`);
+}
+app.post('/api/auth/forgot', authLimiter, wrap(async (req, res) => {
+  const email = clean(req.body.email), u = email && await User.findOne({email});
+  if (u) {
+    const t = crypto.randomBytes(32).toString('hex');
+    u.resetHash = sha(t); u.resetExp = new Date(Date.now() + 30 * 60000); await u.save();
+    const link = `${APP_URL}/#/reset/${t}`;
+    try { await sendMail(email, 'Reset your CSV Doctor password', `<p>Someone asked to reset the password for your CSV Doctor account.</p><p><a href="${link}">Choose a new password</a></p><p>This link works for 30 minutes. If it was not you, ignore this email.</p>`); } catch (e) { console.error('reset mail', e.message); }
+  }
+  res.json({ok: true});
+}));
+app.post('/api/auth/reset', authLimiter, wrap(async (req, res) => {
+  const t = req.body.token, pw = req.body.password;
+  if (typeof t !== 'string' || !/^[a-f0-9]{64}$/.test(t)) return res.status(400).json({error: 'Reset link is invalid or expired'});
+  if (typeof pw !== 'string' || pw.length < 8 || pw.length > 72) return res.status(400).json({error: 'Password must be 8-72 characters'});
+  const u = await User.findOne({resetHash: sha(t), resetExp: {$gt: new Date()}});
+  if (!u) return res.status(400).json({error: 'Reset link is invalid or expired'});
+  u.passwordHash = await bcrypt.hash(pw, 12); u.resetHash = undefined; u.resetExp = undefined; await u.save();
+  res.json({token: sign(u), email: u.email});
 }));
 app.get('/api/auth/me', auth, wrap(async (req, res) => {
   const u = await User.findById(req.uid); if (!u) return res.status(401).json({error: 'Please sign in'});
