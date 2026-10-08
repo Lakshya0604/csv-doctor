@@ -2,3 +2,9 @@
 /* Keep data readable on small screens; only the table scrolls. */
 @media(max-width:650px){table{min-width:620px}th,td{overflow-wrap:normal;min-width:100px}tbody th,thead th:first-child{min-width:40px}}
 .runs{list-style:none;padding:0;display:grid;gap:8px}.runs li{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.auth form{display:flex;flex-wrap:wrap;gap:8px}.auth input,.auth{max-width:100%}
+/* Account UI: dedicated styles (the shared .import-actions input rule hides inputs for the file picker). */
+header{height:auto;min-height:75px;flex-wrap:wrap;gap:8px 16px;padding:10px 0}
+.hdr-auth{display:flex;align-items:center;gap:10px;min-width:0}.hdr-auth .who{font-size:13px;color:#466246;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hdr-auth button,.btn-link{font-size:13px;padding:8px 14px;border:1px solid #244e3c;border-radius:9px;background:#244e3c;color:#fff;text-decoration:none;font-weight:600}.hdr-auth button{background:#fff;color:#244e3c}
+.auth-form{display:grid;gap:14px;margin-top:16px;max-width:420px}.auth-form label{display:grid;gap:6px;font-size:14px;font-weight:600}.auth-form input{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:1px solid #9fb39a;border-radius:9px;background:#fff;color:#233b34}.auth-form button{width:100%;font-size:16px;padding:13px 16px}.auth-form button.link{border:0;background:none;text-decoration:underline;color:#244e3c;padding:6px}
+.acct-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.acct-actions button{font-size:15px;padding:11px 18px}.acct-actions .danger{color:#9b2c1d;border-color:#d9a8a0}
+.runs li button{font-size:13px;padding:8px 12px}
