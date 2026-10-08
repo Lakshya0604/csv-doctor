@@ -1,6 +1,6 @@
 # CSV Doctor
 
-Preview and clean CSVs locally in your browser. React/Vite UI with a pure JavaScript transformation core. No accounts, database, uploads, analytics or API keys.
+Preview and clean CSVs in your browser. React/Vite UI with a pure JavaScript transformation core. Cleaning runs locally; sign up to save finished runs to MongoDB through a small Express API (bcrypt + JWT).
 
 Demo: https://csv-doctor-ihm2.onrender.com/
 
@@ -12,7 +12,12 @@ Demo: https://csv-doctor-ihm2.onrender.com/
 - Explicit DD/MM/YYYY, MM/DD/YYYY or YYYY-MM-DD dates to ISO; explicit US/European numbers. Invalid values block export.
 - Optional spreadsheet formula protection. Risky cells and headers get an apostrophe; negative numbers also change. Review the log.
 - Cleaned CSV and JSON change log downloads after review confirmation. Original input is preserved.
-- 2 MB / 10,000-row limits. Browser memory only; refresh clears input.
+- 2 MB / 10,000-row limits. Input stays in browser memory; only runs you choose to save are stored.
+- Accounts: signup/login, save a reviewed run (options, row counts, change log, cleaned CSV), list, download and delete runs, delete account. Data is per user in the `csvdoctor` MongoDB database.
+
+## API
+
+`server/index.js` (Express + Mongoose). Env: `MONGODB_URI`, `JWT_SECRET` (32+ chars), `CORS_ORIGIN`. Start with `npm start`; `npm run test:api` runs the integration test against `API_BASE`.
 
 This is a cleanup tool, not accounting software. Formula protection does not guarantee safety in every spreadsheet application. Always review your output.
 

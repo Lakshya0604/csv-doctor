@@ -8,9 +8,17 @@
     "build": "vite build apps/web",
     "test": "node --test packages/core/*.test.js",
     "lint": "eslint .",
-    "test:ui": "playwright test"
+    "test:ui": "playwright test",
+    "start": "node server/index.js",
+    "test:api": "node --test server/api.test.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.6",
+    "express": "^4.22.3",
+    "express-rate-limit": "^7.5.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.24.5",
     "papaparse": "5.5.3",
     "react": "19.2.0",
     "react-dom": "19.2.0"
