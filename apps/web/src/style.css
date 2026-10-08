@@ -8,3 +8,42 @@ header{height:auto;min-height:75px;flex-wrap:wrap;gap:8px 16px;padding:10px 0}
 .auth-form{display:grid;gap:14px;margin-top:16px;max-width:420px}.auth-form label{display:grid;gap:6px;font-size:14px;font-weight:600}.auth-form input{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:1px solid #9fb39a;border-radius:9px;background:#fff;color:#233b34}.auth-form button{width:100%;font-size:16px;padding:13px 16px}.auth-form button.link{border:0;background:none;text-decoration:underline;color:#244e3c;padding:6px}
 .acct-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.acct-actions button{font-size:15px;padding:11px 18px}.acct-actions .danger{color:#9b2c1d;border-color:#d9a8a0}
 .runs li button{font-size:13px;padding:8px 12px}
+/* ===== CSV Doctor v3: clinic-bright theme (mint / coral / sun), motion layer ===== */
+:root{--bg:#f4fbf7;--ink:#10322a;--mut:#4d6b61;--card:#ffffffcc;--line:#cfe8dc;--mint:#14b88a;--teal:#0b7f7a;--coral:#ff6b57;--sun:#ffc23d;--sky:#4aa8ff;--shadow:0 18px 50px -18px #0b7f7a55}
+[data-theme=dark]{--bg:#0b1f1b;--ink:#e6fff6;--mut:#9cc7b9;--card:#12302acc;--line:#1f4a40;--shadow:0 18px 50px -18px #000a}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--ink);transition:background .4s,color .4s;overflow-x:hidden}
+:root{color:var(--ink)}
+.shell{position:relative;z-index:1}
+.aurora{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.aurora i{position:absolute;width:55vmax;height:55vmax;border-radius:50%;filter:blur(70px);opacity:.38;will-change:transform;animation:drift 22s ease-in-out infinite alternate}
+.aurora i:nth-child(1){background:var(--mint);top:-20vmax;left:-15vmax}.aurora i:nth-child(2){background:var(--sun);top:10vmax;right:-25vmax;animation-duration:28s;opacity:.3}.aurora i:nth-child(3){background:var(--coral);bottom:-30vmax;left:20vw;animation-duration:34s;opacity:.22}
+[data-theme=dark] .aurora i{opacity:.2}
+@keyframes drift{to{transform:translate3d(8vmax,6vmax,0) scale(1.15)}}
+header{border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.brand,.privacy,.hero p,.eyebrow{color:var(--ink)}.privacy,.hero p{color:var(--mut)}
+.logo{background:linear-gradient(135deg,var(--mint),var(--teal));color:#fff;box-shadow:0 8px 20px -6px var(--teal);animation:beat 2.4s ease-in-out infinite}
+@keyframes beat{0%,60%,100%{transform:scale(1)}70%{transform:scale(1.12)}80%{transform:scale(.97)}90%{transform:scale(1.06)}}
+.hero h1{color:var(--ink);background:none}.hero h1 span{background:linear-gradient(100deg,var(--mint),var(--sky),var(--coral),var(--mint));background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 7s linear infinite}
+@keyframes shine{to{background-position:250% 0}}
+.ecg{width:100%;height:56px;margin:-8px 0 8px;display:block}.ecg path{fill:none;stroke:var(--coral);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:700;stroke-dashoffset:700;animation:trace 3.2s ease-in-out infinite;filter:drop-shadow(0 0 6px #ff6b5788)}
+@keyframes trace{0%{stroke-dashoffset:700}60%,100%{stroke-dashoffset:0}}
+.hero{flex-wrap:wrap}.hero>div,.import-card,.auth,.history,.paste,.workspace{animation:rise .7s cubic-bezier(.2,.8,.2,1) both}.import-card{animation-delay:.1s}
+@keyframes rise{from{opacity:0;transform:translate3d(0,22px,0)}}
+.import-card{background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+@media(hover:hover){.import-card:hover{transform:perspective(900px) rotateX(1.5deg) translateY(-4px)}}
+.import-card h2,.import-card b{color:var(--ink)}.import-card p{color:var(--mut)}
+.auth{position:relative;border:0;background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(120deg,var(--mint),var(--sun),var(--coral)) border-box;border:2px solid transparent}
+button{background:var(--card);color:var(--ink);border-color:var(--line);border-radius:12px;transition:transform .2s,box-shadow .2s,background .2s}button:hover{background:var(--card);transform:translateY(-2px);box-shadow:0 10px 22px -10px var(--teal)}button:active{transform:scale(.97)}
+button.primary,.btn-link,.hdr-auth button{background:linear-gradient(135deg,var(--mint),var(--teal));color:#fff;border:0;box-shadow:0 10px 24px -10px var(--teal)}.hdr-auth button{background:linear-gradient(135deg,var(--coral),#ff9a57)}button.primary:hover{background:linear-gradient(135deg,var(--mint),var(--teal))}
+.auth-form input{background:var(--bg);color:var(--ink);border:2px solid var(--line);transition:border-color .2s,box-shadow .2s}.auth-form input:focus{border-color:var(--mint);box-shadow:0 0 0 4px #14b88a33;outline:0}
+.auth-form button.link,.acct-actions .danger{box-shadow:none}.acct-actions .danger{color:var(--coral);border-color:var(--coral);background:transparent}
+.theme-toggle{width:40px;height:40px;padding:0!important;border-radius:50%!important;font-size:18px;display:grid;place-items:center;background:var(--card)!important;color:var(--ink)!important;border:1px solid var(--line)!important;box-shadow:none!important}
+.hdr-auth .who{color:var(--mut)}
+.runs li{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px;animation:rise .5s both}
+.stats>*,.pills>*{transition:transform .25s}.stats>*:hover{transform:translateY(-3px)}
+table,.table-wrap{background:var(--card);color:var(--ink)}th,td{border-color:var(--line)}
+[data-theme=dark] .fixes,[data-theme=dark] .preview,[data-theme=dark] .export,[data-theme=dark] input,[data-theme=dark] textarea,[data-theme=dark] select{background:var(--card);color:var(--ink);border-color:var(--line)}
+@media(max-width:650px){.hero h1{font-size:44px}.ecg{height:40px}.hdr-auth{width:100%;justify-content:space-between}.hdr-auth .who{max-width:55vw}.aurora i{filter:blur(50px)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.ecg path{stroke-dashoffset:0}}
+.auth .auth-form{display:grid;width:100%;max-width:420px}.auth .auth-form input{width:100%;max-width:100%}.auth{align-items:start}
+@media(max-width:650px){.privacy{display:none}header{justify-content:space-between}.hdr-auth{width:auto}.btn-link,.hdr-auth button{padding:9px 14px}}
