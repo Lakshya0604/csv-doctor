@@ -1,5 +1,6 @@
 import {test,expect} from '@playwright/test';
 import fs from 'node:fs/promises';
+test.beforeEach(async({page})=>{await page.addInitScript(()=>sessionStorage.setItem('csvd-guest','1'));});
 test('sample cleanup, explicit mapping, downloads and no outbound data',async({page})=>{
  const outbound=[];page.on('request',r=>{if(['POST','PUT','PATCH'].includes(r.method()))outbound.push(r.url());});
  await page.goto('/');await page.getByRole('button',{name:'Try sales sample'}).click();
