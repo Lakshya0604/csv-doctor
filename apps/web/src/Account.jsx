@@ -24,3 +24,9 @@ export function History({account, refresh}) {
     {err && <div role="alert" className="error">{err}</div>}
     {runs === null ? <p>Loading…</p> : !runs.length ? <p>No saved runs yet. Clean a CSV, review it, then choose "Save to my history".</p> : <ul className="runs">{runs.map(r => <li key={r._id}><b>{r.name}</b> <span>{new Date(r.createdAt).toLocaleString()} · {r.inputRows} → {r.outputRows} rows · {r.changeCount} changes</span> <button type="button" onClick={() => dl(r._id, 'csv')}>↓ CSV</button> <button type="button" onClick={() => dl(r._id, 'log')}>↓ Log</button> <button type="button" onClick={() => del(r._id)}>Delete</button></li>)}</ul>}</section>;
 }
+
+export function ThemeToggle() {
+  const [dark, setDark] = useState(() => document.documentElement.dataset.theme === 'dark');
+  useEffect(() => {document.documentElement.dataset.theme = dark ? 'dark' : 'light'; try {localStorage.setItem('csvd-theme', dark ? 'dark' : 'light');} catch { /* storage blocked */ }}, [dark]);
+  return <button type="button" className="theme-toggle" aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'} aria-pressed={dark} onClick={() => setDark(!dark)}>{dark ? '☀' : '☾'}</button>;
+}
