@@ -38,7 +38,6 @@ export function AuthPage({account, mode, token}) {
         {mode === 'signup' && <a className="link" href="#/login">Have an account? Sign in</a>}
         {(mode === 'forgot' || mode === 'reset') && <a className="link" href="#/login">Back to sign in</a>}
       </form>
-      {(mode === 'login' || mode === 'signup') && <button type="button" className="guest" onClick={() => {sessionStorage.setItem('csvd-guest', '1'); go('#/');}}>Continue without an account</button>}
     </section></main>;
 }
 export function HistoryPage({account, refresh}) {
