@@ -5,9 +5,8 @@ const useHash = () => {const [h, setH] = useState(window.location.hash || '#/');
 export default function App() {
   const account = useAccount(), hash = useHash(), [refresh, setRefresh] = useState(0);
   const authMode = hash === '#/login' ? 'login' : hash === '#/signup' ? 'signup' : hash === '#/forgot' ? 'forgot' : hash.startsWith('#/reset/') ? 'reset' : null;
-  const guest = sessionStorage.getItem('csvd-guest') === '1';
   const signedIn = !!account.email;
-  const target = !account.ready ? null : signedIn && authMode && authMode !== 'reset' ? '#/' : !signedIn && hash === '#/history' ? '#/login' : !signedIn && !authMode && !guest && hash === '#/' ? '#/login' : null;
+  const target = !account.ready ? null : signedIn && authMode && authMode !== 'reset' ? '#/' : !signedIn && hash === '#/history' ? '#/login' : !signedIn && !authMode && hash === '#/' ? '#/login' : null;
   useEffect(() => {if (target) go(target);}, [target]);
   const prev = React.useRef(signedIn);
   useEffect(() => {if (prev.current && !signedIn) {sessionStorage.removeItem('csvd-guest'); go('#/login');} prev.current = signedIn;}, [signedIn]);
