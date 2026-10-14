@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import rateLimit from 'express-rate-limit';
 import crypto from 'node:crypto';
 
-const {MONGODB_URI, JWT_SECRET, CORS_ORIGIN = 'https://csv-doctor-ihm2.onrender.com', PORT = 3000, BREVO_API_KEY, MAIL_FROM, MAIL_FROM_NAME = 'CSV Doctor', APP_URL = 'https://csv-doctor-ihm2.onrender.com'} = process.env;
+const {MONGODB_URI, JWT_SECRET, CORS_ORIGIN = 'https://csv-doctor-ihm2.onrender.com', PORT = 3000, BREVO_API_KEY, MAIL_FROM, MAIL_FROM_NAME = 'CSV Doctor', APP_URL = 'https://csv-doctor-ly.web.app'} = process.env;
 if (!MONGODB_URI || !JWT_SECRET || JWT_SECRET.length < 32) { console.error('MONGODB_URI and a 32+ char JWT_SECRET are required'); process.exit(1); }
 const MAX_CSV = 2 * 1024 * 1024;
 const User = mongoose.model('User', new mongoose.Schema({email: {type: String, unique: true, required: true}, passwordHash: {type: String, required: true}, resetHash: String, resetExp: Date}, {timestamps: true}));
