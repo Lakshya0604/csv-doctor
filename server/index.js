@@ -19,7 +19,7 @@ const Run = mongoose.model('Run', new mongoose.Schema({
 
 const app = express();
 app.set('trust proxy', 1);
-app.use(cors({origin: CORS_ORIGIN}));
+app.use(cors({origin: [CORS_ORIGIN, 'https://csv-doctor-ly.web.app', 'https://csv-doctor-ly.firebaseapp.com']}));
 app.use(express.json({limit: '3mb'}));
 const authLimiter = rateLimit({windowMs: 15 * 60000, limit: 30, standardHeaders: true, legacyHeaders: false, message: {error: 'Too many attempts. Try again later.'}});
 const sign = u => jwt.sign({sub: String(u._id)}, JWT_SECRET, {expiresIn: '7d'});
